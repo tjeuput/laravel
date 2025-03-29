@@ -29,10 +29,19 @@ class User extends Authenticatable
      *
      * @var list<string>
      */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+//    protected $hidden = [
+//        'password',
+//        'remember_token',
+//    ];
+
+    protected function hidden(): array
+    {
+        return [
+            'password',
+            'remember_token',
+        ];
+    }
+
 
     /**
      * Get the attributes that should be cast.
@@ -46,4 +55,19 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function roles(){
+    //
+        return $this->belongsToMany(Role::class);
+
+    }
+
+    public function documents(){
+        return $this->hasMany(Document::class);
+    }
+
+    public function hasRole($role){
+        return $this->roles()->where('name', $role)->exists();
+    }
+
 }
